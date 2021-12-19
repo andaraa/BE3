@@ -20,12 +20,23 @@ class produk {
       next(error);
     }
   };
+  static listProduct = async (req, res, next) => {
+    try {
+      const result = await produkSchema.find();
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
   static create = async (req, res, next) => {
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const url = protocol + '://' + host;
     const { NamaProduk, Harga, RincianProduk, Stok, PenilaianProduk } = req.body;
-
+    console.log(req.file);
     try {
       const result = await produkSchema.create({
-        ImageProduk: 'upload/' + req.file.filename,
+        ImageProduk: url + '/uploads/' + req.file.filename,
         NamaProduk,
         Harga,
         RincianProduk,
